@@ -10,6 +10,7 @@ import {
   BookOpen,
   Sparkles,
   ChevronRight,
+  Shield,
 } from 'lucide-react';
 import type { AppView } from '../types';
 
@@ -29,6 +30,12 @@ export default function Sidebar({ currentView, onNavigate, savedCount }: Sidebar
       label: 'Saved Estimates',
       icon: <Bookmark size={18} />,
       badge: savedCount > 0 ? savedCount : undefined,
+    },
+    {
+      view: 'agent' as AppView,
+      label: 'Cost Watch Agent',
+      icon: <Shield size={18} />,
+      badgeTag: 'Agent',
     },
     { view: 'learn' as AppView, label: 'Learn', icon: <BookOpen size={18} /> },
   ];
@@ -58,6 +65,11 @@ export default function Sidebar({ currentView, onNavigate, savedCount }: Sidebar
               {item.badge !== undefined && (
                 <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-normal">
                   {item.badge}
+                </span>
+              )}
+              {'badgeTag' in item && item.badgeTag && (
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/20">
+                  {item.badgeTag}
                 </span>
               )}
             </button>

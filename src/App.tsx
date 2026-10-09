@@ -14,6 +14,7 @@ import {
 import Dashboard from './pages/Dashboard';
 import CreateEstimate from './pages/CreateEstimate';
 import TemplatesPage from './pages/TemplatesPage';
+import CostWatchAgentPage from './pages/CostWatchAgentPage';
 import LearnPage from './pages/LearnPage';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -141,6 +142,10 @@ export default function App() {
                 setView('dashboard');
               }}
             />
+          )}
+
+          {view === 'agent' && (
+            <CostWatchAgentPage projects={projects} onNavigate={handleNavigate} />
           )}
 
           {view === 'learn' && <LearnPage />}

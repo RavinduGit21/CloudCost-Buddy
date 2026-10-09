@@ -124,4 +124,4 @@ export interface Recommendation {
 
 /* ─────────── Navigation ─────────── */
 
-export type AppView = 'dashboard' | 'create' | 'edit' | 'learn' | 'templates' | 'saved';
+export type AppView = 'dashboard' | 'create' | 'edit' | 'learn' | 'templates' | 'saved' | 'agent';

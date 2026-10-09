@@ -37,6 +37,13 @@ AWS pricing can be intimidating for learners. With multiple pricing dimensions (
   - Cost comparison bar charts across saved architectures.
   - Dynamic cost summaries that update instantly as sliders and toggles change.
 
+- **Autonomous Cost Watch Agent**:
+  - Goal-driven software agent with user-defined monthly budget limits ($/month).
+  - Continuously audits saved architectural models for budget variances.
+  - Flags architecture status: `HEALTHY`, `WARNING` (within 10% threshold), or `BREACHED`.
+  - Pinpoints primary cost culprits and synthesizes a prescriptive remediation roadmap showing exact projected cost with each fix applied.
+  - Generates downloadable and shareable audit reports.
+
 - **Local-First Persistence & Export**:
   - Zero database or authentication requirement: architectures persist safely in browser `localStorage`.
   - Export full architecture configurations and cost breakdowns as structured **JSON** or spreadsheet-compatible **CSV**.
@@ -171,9 +178,57 @@ When scaling beyond a client-side prototype, the application can be seamlessly a
    - *CloudWatch Alarms*: Monitor Lambda latency, 5xx error rates, and API invocation counts.
    - *AWS Budgets*: Set hard alert thresholds (e.g., $1.00/mo) to guarantee that backend learning experiments never incur surprise costs.
 
-5. **Security & Identity (AWS IAM + Amazon Cognito)**:
-   - Principle of Least Privilege: Lambda execution roles granted only minimum necessary DynamoDB permissions.
-   - Optional Cognito user pools if multi-user team collaboration is required in the future.
+---
+
+## 🤖 Agent Architecture & Classification (AWS Challenge Disclosure)
+
+For transparency and academic integrity in the **AWS Builder Challenge**:
+
+- **What it is:** A **Goal-Based Heuristic Software Agent** (Russell & Norvig, *Artificial Intelligence: A Modern Approach*). It maintains internal state, perceives infrastructure configuration through deterministic calculation sensors, compares variance against user-defined budget goals, isolates primary drivers, and synthesizes a structured remediation roadmap.
+- **What it is not:** It does **not** consume third-party Generative LLM APIs (such as Amazon Bedrock Claude or OpenAI GPT). It avoids probabilistic text generators to prevent pricing hallucinations, maintain zero runtime token costs, and provide instantaneous, testable verification.
+
+---
+
+## ⚡ Scheduled Unattended Execution via AWS (Manual Console Instructions)
+
+To run the Cost Watch Agent autonomously 24/7 in the cloud without keeping a browser open, deploy this serverless AWS-native architecture (100% Free Tier eligible):
+
+### Architecture Flow:
+```
+[Amazon EventBridge] (Cron Trigger)
+        │
+        ▼ (Every day at 08:00 UTC)
+  [AWS Lambda] (Runs costWatchAgent logic against project estimates)
+        │
+        ▼ (If budget is breached)
+   [Amazon SNS] ──> [Email Notification to Cloud Admin]
+```
+
+### Step-by-Step AWS Management Console Setup (Zero CLI / Zero Secrets):
+
+1. **Step 1: Create an Amazon SNS Topic for Email Alerts**
+   - Open the AWS Console and navigate to **Amazon SNS** -> **Topics** -> **Create topic**.
+   - Type: **Standard**, Name: `CloudCostWatch-Alerts`. Click **Create topic**.
+   - Under **Subscriptions**, click **Create subscription**:
+     - Protocol: **Email**, Endpoint: *your-email@example.com*.
+     - Click **Create subscription**, then open your inbox and click **"Confirm subscription"**.
+
+2. **Step 2: Create the Cost Watch AWS Lambda Function**
+   - Navigate to **AWS Lambda** -> **Create function**.
+   - Function name: `CloudCostWatch-Agent`, Runtime: **Node.js 20.x**.
+   - Click **Create function**.
+   - In the **Code source** editor, paste the lightweight calculation engine from `src/features/agent/costWatchAgent.ts`.
+   - If `report.breachedCount > 0`, call `sns.publish({ TopicArn, Message })`.
+   - Under **Configuration** -> **Permissions**, click the Execution Role and attach the managed policy `AmazonSNSFullAccess` (or an inline policy granting `sns:Publish` on your topic ARN).
+
+3. **Step 3: Schedule with Amazon EventBridge (CloudWatch Events)**
+   - In Lambda, click **Add trigger**.
+   - Select **EventBridge (CloudWatch Events)**.
+   - Rule type: **Schedule expression**.
+   - Schedule expression: `cron(0 8 * * ? *)` (runs daily at 8:00 AM UTC).
+   - Click **Add**.
+
+*Cost impact:* **$0.00 / month.** EventBridge is free; Lambda's daily run uses ~30 invocations/month (well within the 1,000,000 free monthly tier); SNS email alerts are free for the first 1,000 messages/month.
 
 ---
 

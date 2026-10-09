@@ -27,6 +27,7 @@ export default function Header({
     { view: 'create', label: 'Create Estimate' },
     { view: 'templates', label: 'Templates' },
     { view: 'saved', label: 'Saved Estimates' },
+    { view: 'agent', label: 'Cost Watch Agent' },
     { view: 'learn', label: 'Learn' },
   ];
 
