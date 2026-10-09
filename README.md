@@ -35,7 +35,7 @@ AWS pricing can be intimidating for learners. With multiple pricing dimensions (
 - **Interactive Visualizations & Analytics**:
   - Visual breakdown by service percentage using interactive responsive Donut / Pie charts.
   - Cost comparison bar charts across saved architectures.
-  - Dynamic cost summaries that update instantly as sliders and toggles change.
+  - Dynamic cost summaries that update instantly as sliders and toggles change
 
 - **Autonomous Cost Watch Agent**:
   - Goal-driven software agent with user-defined monthly budget limits ($/month).
