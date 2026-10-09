@@ -25,7 +25,6 @@ describe('calculateServiceCost', () => {
       serviceType: 's3',
       storageGB: 100,
       requestsPerMonth: 50000,
-      storageClass: 'standard',
     };
 
     const result = calculateServiceCost(config, 'us-east-1');
@@ -76,7 +75,6 @@ describe('calculateProjectCost', () => {
     const services: ProjectService[] = [
       {
         id: '1',
-        name: 'Web Server',
         config: {
           serviceType: 'ec2',
           instanceCount: 2,
@@ -87,12 +85,10 @@ describe('calculateProjectCost', () => {
       },
       {
         id: '2',
-        name: 'Asset Storage',
         config: {
           serviceType: 's3',
           storageGB: 50,
           requestsPerMonth: 10000,
-          storageClass: 'standard',
         },
       },
     ];

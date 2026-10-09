@@ -9,17 +9,21 @@
  */
 
 import type { Project } from '../../types';
+import { INITIAL_SEED_PROJECTS } from '../../data/seedData';
 
 const STORAGE_KEY = 'cloudcost-buddy-projects';
 
 /**
  * Load all saved projects from localStorage.
- * Returns an empty array if nothing is saved or if data is corrupt.
+ * Returns initial seed projects on first visit, or empty array if user cleared.
  */
 export function loadProjects(): Project[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
+    if (raw === null) {
+      saveProjects(INITIAL_SEED_PROJECTS);
+      return INITIAL_SEED_PROJECTS;
+    }
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed as Project[];
@@ -81,7 +85,7 @@ export function duplicateProject(id: string): Project[] {
 
 /** Clear everything */
 export function clearAllProjects(): void {
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
 }
 
 /* ─── Export helpers ─── */

@@ -9,7 +9,7 @@
  *   Right column → live cost breakdown + recommendations
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   PlusCircle,
   X,
@@ -133,6 +133,17 @@ export default function CreateEstimate({ existingProject, onSave, onCancel }: Cr
     existingProject?.services?.[0]?.id ?? null,
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (existingProject) {
+      setName(existingProject.name);
+      setDescription(existingProject.description);
+      setRegion(existingProject.region);
+      setServices(existingProject.services);
+      setNotes(existingProject.notes);
+      setExpandedService(existingProject.services?.[0]?.id ?? null);
+    }
+  }, [existingProject]);
 
   /* ── Live cost calculation ── */
   const estimate = useMemo(

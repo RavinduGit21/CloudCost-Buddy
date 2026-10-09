@@ -11,10 +11,10 @@ describe('generateRecommendations', () => {
       region: 'us-east-1',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      notes: '',
       services: [
         {
           id: 'svc-1',
-          name: 'Main EC2',
           config: {
             serviceType: 'ec2',
             instanceCount: 1,
@@ -58,15 +58,14 @@ describe('generateRecommendations', () => {
       region: 'us-east-1',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      notes: '',
       services: [
         {
           id: 'svc-s3',
-          name: 'Media Bucket',
           config: {
             serviceType: 's3',
             storageGB: 200,
             requestsPerMonth: 5000,
-            storageClass: 'standard',
           },
         },
       ],
